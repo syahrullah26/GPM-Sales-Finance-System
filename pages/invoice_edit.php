@@ -21,13 +21,8 @@ $items = mysqli_query($konek, "SELECT * FROM invoice_items WHERE invoice_id = $i
 
 
 <head>
-    <!-- MUAT Bootstrap LEBIH DULU -->
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome (untuk ikon trash, dll) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- CSS Custom kamu -->
     <link rel="stylesheet" href="assets/css/Beranda.css">
 </head>
 
