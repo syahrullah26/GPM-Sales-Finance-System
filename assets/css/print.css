@@ -1,0 +1,43 @@
+@media print {
+    /* Atur margin dan padding untuk body */
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 12px; /* Ukuran font lebih kecil untuk pencetakan */
+        color: #000; /* Pastikan teks berwarna hitam */
+    }
+
+    /* Sembunyikan elemen yang tidak perlu saat pencetakan */
+    .print-button {
+        display: none; /* Sembunyikan tombol cetak saat pencetakan */
+    }
+    .icon{
+        display: none;
+    }
+    .print-note {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: 12px;
+        color: #666;
+        /* Gaya untuk catatan cetak */
+    }
+
+    /* Gaya untuk chart */
+    .chart-container {
+        page-break-inside: avoid; /* Hindari pemisahan chart pada halaman baru */
+        width: 100%; /* Pastikan chart menggunakan lebar penuh */
+        margin: 0 auto; /* Atur margin untuk pusatkan chart */
+    }
+
+    /* Atur ukuran canvas agar sesuai dengan halaman cetak */
+    canvas {
+        width: 100% !important; /* Pastikan canvas menggunakan lebar penuh */
+        height: auto !important; /* Sesuaikan tinggi otomatis */
+    }
+
+    @page {
+        margin: 20mm; /* Margin halaman cetak */
+    }
+}

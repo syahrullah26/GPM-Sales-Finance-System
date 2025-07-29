@@ -1,0 +1,62 @@
+
+
+  /* Tabel Produk */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+
+  table th,
+  table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  table th {
+    background-color: #f0f0f0;
+  }
+
+  /* Responsive */
+  @media screen and (max-width: 768px) {
+    .card-body {
+      padding: 20px;
+    }
+
+    table thead {
+      display: none;
+    }
+
+    table,
+    table tbody,
+    table tr,
+    table td {
+      display: block;
+      width: 100%;
+    }
+
+    table tr {
+      margin-bottom: 15px;
+    }
+
+    table td {
+      text-align: right;
+      position: relative;
+      padding-left: 50%;
+    }
+
+    table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 10px;
+      width: 45%;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    button.btn {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }

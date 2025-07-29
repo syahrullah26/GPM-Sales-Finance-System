@@ -1,0 +1,45 @@
+Array
+(
+    [invoice_id] => 1
+    [perusahaan] => PT.Leighton contractors
+    [alamat] => JL.Toyo Giri Bekasi
+    [no_invoice] => 8162/PM/INV/VI/2025
+    [tanggal_invoice] => 2025-07-04
+    [jatuh_tempo] => 2025-07-26
+    [item_id] => Array
+        (
+            [0] => 2
+            [1] => 
+        )
+
+    [nama_barang] => Array
+        (
+            [0] => Sticker 3M logo LCI uk 100 x 20 cm
+            [1] => Sticker 3M logo LCI uk 200 x 40 cm
+        )
+
+    [quantity] => Array
+        (
+            [0] => 50
+            [1] => 100
+        )
+
+    [satuan] => Array
+        (
+            [0] => pcs
+            [1] => pcs
+        )
+
+    [harga_beli] => Array
+        (
+            [0] => 15000.00
+            [1] => 25000
+        )
+
+    [harga_jual] => Array
+        (
+            [0] => 40000.00
+            [1] => 33000
+        )
+
+)
