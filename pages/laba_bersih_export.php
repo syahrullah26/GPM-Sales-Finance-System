@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 $tanggalAwal = $_GET['tanggal_awal'] ?? date('Y-m-01');
 $tanggalAkhir = $_GET['tanggal_akhir'] ?? date('Y-m-t');
 
-$where = ["status = 'sudah bayar'"];
+$where = [];
 
 if (!empty($tanggalAwal)) {
     $where[] = "tanggal_invoice >= '$tanggalAwal'";

@@ -342,7 +342,38 @@ $paidinvoices = mysqli_query($konek, $paidsql);
                                     <div class="row">
                                         <div class="card">
                                             <div class="card-body">
+
                                                 <h5 class="card-title">Ongoing Invoice</h5>
+                                                <div class="flex justify-center mb-3">
+                                                    <h5 class="card-title mr-2">Search:</h5>
+                                                    <input type="text" id="searchInput" class="form-control mb-5" placeholder="Search...">
+                                                </div>
+                                                <script>
+                                                    document.addEventListener('DOMContentLoaded', function() {
+                                                        const searchInput = document.getElementById('searchInput');
+                                                        const table = document.getElementById('ongoing-data');
+                                                        const tr = table.getElementsByTagName('tr');
+
+                                                        searchInput.addEventListener('keyup', function() {
+                                                            const filter = searchInput.value.toLowerCase();
+
+                                                            for (let i = 1; i < tr.length; i++) {
+                                                                let visible = false;
+                                                                let td = tr[i].getElementsByTagName('td');
+
+                                                                for (let j = 0; j < td.length; j++) {
+                                                                    if (td[j] && td[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                                                                        visible = true;
+                                                                        break;
+                                                                    }
+                                                                }
+
+                                                                tr[i].style.display = visible ? "" : "none";
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+
                                                 <span class="text-muted">Pada Halaman ini akan menampilkan data invoices yang <strong>belum melakukan pembayaran</strong> dan <strong>tanggal jatuh tempo</strong>. </span>
                                                 <div class="table-responsive">
                                                     <table class="table table-striped table-sm table-hover" id="ongoing-data">
@@ -351,6 +382,7 @@ $paidinvoices = mysqli_query($konek, $paidsql);
                                                                 <th rowspan="2">No</th>
                                                                 <th rowspan="2">Perusahaan</th>
                                                                 <th rowspan="2">No Invoice</th>
+                                                                <th rowspan="2">No PO</th>
                                                                 <th rowspan="2">Tanggal Invoice</th>
                                                                 <th rowspan="2">Jatuh Tempo</th>
                                                                 <th rowspan="2">Pajak</th>
@@ -403,6 +435,7 @@ $paidinvoices = mysqli_query($konek, $paidsql);
                                                                             <td rowspan="<?= $rowspan ?>"><?= $no++ ?></td>
                                                                             <td rowspan="<?= $rowspan ?>"><?= htmlspecialchars($inv['perusahaan']) ?></td>
                                                                             <td rowspan="<?= $rowspan ?>"><?= htmlspecialchars($inv['no_invoice']) ?></td>
+                                                                            <td rowspan="<?= $rowspan ?>"><?= htmlspecialchars($inv['no_po']) ?></td>
                                                                             <td rowspan="<?= $rowspan ?>"><?= $inv['tanggal_invoice'] ?></td>
                                                                             <td rowspan="<?= $rowspan ?>"><?= $inv['jatuh_tempo'] ?></td>
                                                                             <td rowspan="<?= $rowspan ?>">
@@ -483,6 +516,36 @@ $paidinvoices = mysqli_query($konek, $paidsql);
                                         <div class="card-body">
                                             <h5 class="card-title">Paid Invoice</h5>
                                             <span class="text-muted">Pada Halaman ini akan menampilkan data invoices yang <strong>sudah melakukan pembayaran</strong>.</span>
+                                            <div class="flex justify-center mb-3">
+                                                <h5 class="card-title mr-2">Search:</h5>
+                                                <input type="text" id="searchInputPaid" class="form-control mb-5" placeholder="Search..">
+                                            </div>
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    const searchInput = document.getElementById('searchInputPaid');
+                                                    const table = document.getElementById('paid-data');
+                                                    const tr = table.getElementsByTagName('tr');
+
+                                                    searchInput.addEventListener('keyup', function() {
+                                                        const filter = searchInput.value.toLowerCase();
+
+                                                        for (let i = 1; i < tr.length; i++) {
+                                                            let visible = false;
+                                                            let td = tr[i].getElementsByTagName('td');
+
+                                                            for (let j = 0; j < td.length; j++) {
+                                                                if (td[j] && td[j].innerHTML.toLowerCase().indexOf(filter) > -1) {
+                                                                    visible = true;
+                                                                    break;
+                                                                }
+                                                            }
+
+                                                            tr[i].style.display = visible ? "" : "none";
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+
                                             <div class="row mt-2">
                                                 <?php
                                                 date_default_timezone_set('Asia/Jakarta');
@@ -566,6 +629,7 @@ $paidinvoices = mysqli_query($konek, $paidsql);
                                                         <th rowspan="2">No</th>
                                                         <th rowspan="2">Perusahaan</th>
                                                         <th rowspan="2">No Invoice</th>
+                                                        <th rowspan="2">No PO</th>
                                                         <th rowspan="2">Tanggal Invoice</th>
                                                         <th rowspan="2">Jatuh Tempo</th>
                                                         <th rowspan="2">Pajak</th>
@@ -619,6 +683,7 @@ $paidinvoices = mysqli_query($konek, $paidsql);
                                                                     <td rowspan="<?= $rowspan_paid ?>"><?= $no++ ?></td>
                                                                     <td rowspan="<?= $rowspan_paid ?>"><?= htmlspecialchars($paidInv['perusahaan']) ?></td>
                                                                     <td rowspan="<?= $rowspan_paid ?>"><?= htmlspecialchars($paidInv['no_invoice']) ?></td>
+                                                                    <td rowspan="<?= $rowspan_paid ?>"><?= htmlspecialchars($paidInv['no_po']) ?></td>
                                                                     <td rowspan="<?= $rowspan_paid ?>"><?= $paidInv['tanggal_invoice'] ?></td>
                                                                     <td rowspan="<?= $rowspan_paid ?>"><?= $paidInv['jatuh_tempo'] ?></td>
                                                                     <td rowspan="<?= $rowspan_paid ?>">

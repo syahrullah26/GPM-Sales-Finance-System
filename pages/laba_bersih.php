@@ -5,8 +5,7 @@ $tahun = $_POST['tahun'] ?? date('Y');
 
 $query = "
     SELECT * FROM invoices 
-    WHERE status = 'sudah bayar' 
-    AND MONTH(tanggal_invoice) = '$bulan' 
+    WHERE MONTH(tanggal_invoice) = '$bulan' 
     AND YEAR(tanggal_invoice) = '$tahun'
     ORDER BY tanggal_invoice ASC
 ";

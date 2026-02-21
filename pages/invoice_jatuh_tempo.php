@@ -260,6 +260,7 @@ $invoices = mysqli_query($konek, $sql);
                                             <th rowspan="2">No</th>
                                             <th rowspan="2">Perusahaan</th>
                                             <th rowspan="2">No Invoice</th>
+                                            <th rowspan="2">No PO</th>
                                             <th rowspan="2">Tanggal Invoice</th>
                                             <th rowspan="2">Jatuh Tempo</th>
                                             <th rowspan="2">Pajak</th>
@@ -312,6 +313,7 @@ $invoices = mysqli_query($konek, $sql);
                                                         <td rowspan="<?= $rowspan ?>"><?= $no++ ?></td>
                                                         <td rowspan="<?= $rowspan ?>"><?= htmlspecialchars($inv['perusahaan']) ?></td>
                                                         <td rowspan="<?= $rowspan ?>"><?= htmlspecialchars($inv['no_invoice']) ?></td>
+                                                        <td rowspan="<?= $rowspan ?>"><?= htmlspecialchars($inv['no_po']) ?></td>
                                                         <td rowspan="<?= $rowspan ?>"><?= $inv['tanggal_invoice'] ?></td>
                                                         <td rowspan="<?= $rowspan ?>"><?= $inv['jatuh_tempo'] ?></td>
                                                         <td rowspan="<?= $rowspan ?>">
