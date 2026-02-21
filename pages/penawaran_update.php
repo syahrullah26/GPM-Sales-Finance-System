@@ -5,6 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = intval($_POST['penawaran_id']);
     $no_sp = $_POST['no_sp'];
     $perusahaan = $_POST['perusahaan'];
+    $penerima = $_POST['penerima'];
     $alamat = $_POST['alamat'];
     $tanggal = $_POST['tanggal'];
 
@@ -16,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update penawaran
-    $update = mysqli_query($konek, "UPDATE penawaran SET no_sp = '$no_sp', nama_perusahaan='$perusahaan', alamat='$alamat', tanggal='$tanggal', total='$total' WHERE id=$id");
+    $update = mysqli_query($konek, "UPDATE penawaran SET no_sp = '$no_sp', nama_perusahaan='$perusahaan',penerima='$penerima', alamat='$alamat', tanggal='$tanggal', total='$total' WHERE id=$id");
 
     if ($update) {
         // Update/Insert penawaran_items

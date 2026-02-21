@@ -6,6 +6,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 // Cek filter
 $start = $_GET['start_date'] ?? '';
@@ -72,50 +73,50 @@ while ($pgl = mysqli_fetch_assoc($query)) {
         WHERE pi.pengeluaran_id = {$pgl['id']}
     ");
 
-    $total = $pgl['total_pengeluaran'];
+    $total = (float) $pgl['total_pengeluaran'];
     $grandTotal += $total;
 
     if (mysqli_num_rows($items) == 0) {
-        $sheet->fromArray([
-            $no++,
-            $pgl['no_pengeluaran'],
-            date('d-m-Y', strtotime($pgl['tanggal'])),
-            $pgl['keterangan'],
-            $total,
-            $jenis_text,
-            '-',
-            '-',
-            '-'
-        ], null, "A{$row}");
+        $sheet->setCellValue("A{$row}", $no++);
+        $sheet->setCellValue("B{$row}", $pgl['no_pengeluaran']);
+        $sheet->setCellValue("C{$row}", date('d-m-Y', strtotime($pgl['tanggal'])));
+        $sheet->setCellValue("D{$row}", $pgl['keterangan']);
+        $sheet->setCellValue("E{$row}", $total);
+        $sheet->getStyle("E{$row}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+        $sheet->setCellValue("F{$row}", $jenis_text);
+        $sheet->setCellValue("G{$row}", '-');
+        $sheet->setCellValue("H{$row}", '-');
+        $sheet->setCellValue("I{$row}", '-');
         $row++;
     } else {
         $first = true;
         while ($item = mysqli_fetch_assoc($items)) {
-            $sheet->fromArray([
-                $first ? $no++ : '',
-                $first ? $pgl['no_pengeluaran'] : '',
-                $first ? date('d-m-Y', strtotime($pgl['tanggal'])) : '',
-                $first ? $pgl['keterangan'] : '',
-                $first ? $total : '',
-                $first ? $jenis_text : '',
-                $item['no_invoice'],
-                $item['perusahaan'],
-                $item['nominal']
-            ], null, "A{$row}");
+            $sheet->setCellValue("A{$row}", $first ? $no++ : '');
+            $sheet->setCellValue("B{$row}", $first ? $pgl['no_pengeluaran'] : '');
+            $sheet->setCellValue("C{$row}", $first ? date('d-m-Y', strtotime($pgl['tanggal'])) : '');
+            $sheet->setCellValue("D{$row}", $first ? $pgl['keterangan'] : '');
+            if ($first) {
+                $sheet->setCellValue("E{$row}", $total);
+                $sheet->getStyle("E{$row}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            }
+            $sheet->setCellValue("F{$row}", $first ? $jenis_text : '');
+            $sheet->setCellValue("G{$row}", $item['no_invoice']);
+            $sheet->setCellValue("H{$row}", $item['perusahaan']);
+            $nominal = (float) $item['nominal'];
+            $sheet->setCellValue("I{$row}", $nominal);
+            $sheet->getStyle("I{$row}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
             $first = false;
             $row++;
         }
     }
 }
 
-// Tampilkan Grand Total
+// Grand Total
 $sheet->setCellValue("A{$row}", 'GRAND TOTAL');
 $sheet->mergeCells("A{$row}:D{$row}");
 $sheet->setCellValue("E{$row}", $grandTotal);
 $sheet->getStyle("A{$row}:E{$row}")->getFont()->setBold(true);
-$sheet->getStyle("E{$row}")
-    ->getNumberFormat()
-    ->setFormatCode('#,##0');
+$sheet->getStyle("E{$row}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 
 // Auto size
 foreach (range('A', 'I') as $col) {
@@ -123,7 +124,7 @@ foreach (range('A', 'I') as $col) {
 }
 
 // Border
-$sheet->getStyle("A4:I" . $row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$sheet->getStyle("A4:I{$row}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
 // Output file
 $cleanPeriode = preg_replace('/[^a-zA-Z0-9\s\-]/', '', $periodeTitle);

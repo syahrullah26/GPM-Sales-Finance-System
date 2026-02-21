@@ -1,5 +1,42 @@
 <?php
 include '../includes/koneksi.php';
+$tanggalSurat = isset($_GET['tanggal_surat']) ? $_GET['tanggal_surat'] : date('Y-m-d');
+
+function formatTanggalIndonesia($tanggal)
+{
+    $hari = [
+        'Sunday'    => 'Minggu',
+        'Monday'    => 'Senin',
+        'Tuesday'   => 'Selasa',
+        'Wednesday' => 'Rabu',
+        'Thursday'  => 'Kamis',
+        'Friday'    => 'Jumat',
+        'Saturday'  => 'Sabtu',
+    ];
+
+    $bulan = [
+        1 => 'Januari',
+        2 => 'Februari',
+        3 => 'Maret',
+        4 => 'April',
+        5 => 'Mei',
+        6 => 'Juni',
+        7 => 'Juli',
+        8 => 'Agustus',
+        9 => 'September',
+        10 => 'Oktober',
+        11 => 'November',
+        12 => 'Desember',
+    ];
+
+    $timestamp = strtotime($tanggal);
+    $hariIni = $hari[date('l', $timestamp)];
+    $tanggalFormat = date('d', $timestamp);
+    $bulanFormat = $bulan[(int)date('m', $timestamp)];
+    $tahun = date('Y', $timestamp);
+
+    return "$hariIni, $tanggalFormat $bulanFormat $tahun";
+}
 
 if (!isset($_GET['id'])) {
     die("ID invoice tidak ditemukan.");
@@ -101,8 +138,9 @@ if (!$invoice) die("Data invoice tidak ditemukan.");
             <td><strong>No Surat Jalan</strong></td>
             <td>: <?= $invoice['no_sj'] ?>/SJ</td>
             <td><strong>Tanggal</strong></td>
-            <td>: ( ___________________________ )</td>
+            <td>: <?= formatTanggalIndonesia($tanggalSurat) ?></td>
         </tr>
+
         <tr>
             <td><strong>PO. No</strong></td>
             <td>: <?= $invoice['no_po'] ?></td>

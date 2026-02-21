@@ -176,7 +176,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                                             <span class="text-muted">: Tombol untuk Penawaran Goal dan ingin membuat invoice secara langsung.</span>
                                         </li>
                                         <li class="mb-2">
-                                            <a href="#" class="btn btn-sm btn-danger" title="Tolak Penawaran" >
+                                            <a href="#" class="btn btn-sm btn-danger" title="Tolak Penawaran">
                                                 <i class="fas fa-times-circle"></i>
                                             </a>
                                             <span class="text-muted">: Tombol untuk Menghapus atau menolak Surat Penawaran.</span>
@@ -216,6 +216,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                                             <th rowspan="2">No</th>
                                             <th rowspan="2">No SP</th>
                                             <th rowspan="2">Perusahaan</th>
+                                            <th rowspan="2">Penerima</th>
                                             <th rowspan="2">Tanggal</th>
                                             <th rowspan="2">Status</th>
                                             <th rowspan="2">Action</th>
@@ -257,6 +258,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                                                         <td rowspan="<?= $rowspan + 1 ?>"><?= $no++ ?></td>
                                                         <td rowspan="<?= $rowspan + 1 ?>"><?= htmlspecialchars($pnw['no_sp']) ?></td>
                                                         <td rowspan="<?= $rowspan + 1 ?>"><?= htmlspecialchars($pnw['nama_perusahaan']) ?></td>
+                                                        <td rowspan="<?= $rowspan + 1 ?>"><?= htmlspecialchars($pnw['penerima']) ?></td>
                                                         <td rowspan="<?= $rowspan + 1 ?>"><?= $pnw['tanggal'] ?></td>
                                                         <td rowspan="<?= $rowspan + 1 ?>">
                                                             <?php

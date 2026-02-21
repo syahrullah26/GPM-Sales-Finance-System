@@ -19,10 +19,13 @@
         <a href="index.php?page=penawaran">Penawaran</a>
       </li>
       <li class="nav-link">
-        <a href="index.php?page=rugiLaba">Rugi Laba</a>
+        <a href="index.php?page=rugiLaba">Invoices & Surat Jalan</a>
       </li>
       <li class="nav-link">
         <a href="index.php?page=pengeluaran">Pengeluaran</a>
+      </li>
+      <li class="nav-link">
+        <a href="index.php?page=rugiLabaBersih">Rugi Laba</a>
       </li>
     </ul>
   </nav>

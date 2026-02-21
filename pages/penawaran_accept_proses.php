@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $no_sj = $_POST['no_sj'];
     $tanggal_invoice = $_POST['tanggal_invoice'];
     $jatuh_tempo = $_POST['tanggal_jatuh_tempo'];
+    $pajak = $_POST['pajak'];
 
     $nama_barang = $_POST['nama_barang'];
     $quantity = $_POST['quantity'];
@@ -21,10 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total_beli = 0;
     $total_jual = 0;
     $total_laba = 0;
-
     $jumlah_item = count($nama_barang);
 
-    // Perhitungan total sebelum insert
     for ($i = 0; $i < $jumlah_item; $i++) {
         $subtotal_beli = $harga_beli[$i] * $quantity[$i];
         $subtotal_jual = $harga_jual[$i] * $quantity[$i];
@@ -37,13 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $total_persen = $total_beli > 0 ? ($total_laba / $total_beli) * 100 : 0;
 
-    // Simpan ke tabel invoices
+    $ppn = ($pajak === 'ya') ? round($total_jual * 0.11, 2) : 0;
+    $status = 'belum bayar';
+
     $query = "INSERT INTO invoices 
-        (perusahaan, alamat, no_invoice, no_po, no_sj, tanggal_invoice, jatuh_tempo, total_beli, total_jual, total_laba, total_persen) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        (perusahaan, alamat, no_invoice, no_po, no_sj, tanggal_invoice, jatuh_tempo, total_beli, total_jual, total_laba, total_persen, pajak, ppn, status) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
     $stmt = $konek->prepare($query);
     $stmt->bind_param(
-        "sssssssdddd",
+        "sssssssddddsss",
         $perusahaan,
         $alamat,
         $no_invoice,
@@ -54,13 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $total_beli,
         $total_jual,
         $total_laba,
-        $total_persen
+        $total_persen,
+        $pajak,
+        $ppn,
+        $status
     );
 
     if ($stmt->execute()) {
         $invoice_id = $stmt->insert_id;
 
-        // Simpan ke invoice_items
         for ($i = 0; $i < $jumlah_item; $i++) {
             $nama = $nama_barang[$i];
             $qty = $quantity[$i];
@@ -94,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt_item->execute();
         }
 
-        // Update status penawaran menjadi 'selesai'
         mysqli_query($konek, "UPDATE penawaran SET status='selesai' WHERE id=$penawaran_id");
 
         echo "<script>alert('Invoice berhasil dibuat!'); window.location.href='../index.php?page=rugi_laba';</script>";

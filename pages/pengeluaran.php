@@ -2,36 +2,34 @@
 include 'includes/koneksi.php';
 
 
-setlocale(LC_TIME, 'id_ID.UTF-8'); // Untuk Bahasa Indonesia, pastikan didukung di sistem Anda
-date_default_timezone_set('Asia/Jakarta'); // Sesuaikan zona waktu
+setlocale(LC_TIME, 'id_ID.UTF-8'); 
+date_default_timezone_set('Asia/Jakarta'); 
 
-// Hari Ini
-$tanggalHariIni = strftime('%A, %d %B %Y', strtotime('today')); // Contoh: Minggu, 27 Juli 2025
 
-// Minggu Ini
+$tanggalHariIni = strftime('%A, %d %B %Y', strtotime('today')); 
+
+
 $tanggal = new DateTime();
-$weekNumber = ceil($tanggal->format('j') / 7); // Hitung minggu ke-berapa dalam bulan
-$namaBulan = strftime('%B', $tanggal->getTimestamp()); // Nama bulan dalam bahasa Indonesia
+$weekNumber = ceil($tanggal->format('j') / 7); 
+$namaBulan = strftime('%B', $tanggal->getTimestamp()); 
 $tahun = $tanggal->format('Y');
-$mingguIni = "Minggu ke-$weekNumber $namaBulan $tahun"; // Contoh: Minggu ke-4 Juli 2025
+$mingguIni = "Minggu ke-$weekNumber $namaBulan $tahun"; 
 
-// Bulan Ini
-$bulanIni = strftime('%B, %Y'); // Contoh: Juli, 2025
-
+$bulanIni = strftime('%B, %Y'); 
 
 
-// Total hari ini
+
+
 $today = date('Y-m-d');
 $queryHari = mysqli_query($konek, "SELECT SUM(total_pengeluaran) AS total FROM pengeluaran WHERE tanggal = '$today'");
 $totalHari = mysqli_fetch_assoc($queryHari)['total'] ?? 0;
 
-// Total minggu ini (Senin s.d Minggu)
 $startOfWeek = date('Y-m-d', strtotime('monday this week'));
 $endOfWeek = date('Y-m-d', strtotime('sunday this week'));
 $queryMinggu = mysqli_query($konek, "SELECT SUM(total_pengeluaran) AS total FROM pengeluaran WHERE tanggal BETWEEN '$startOfWeek' AND '$endOfWeek'");
 $totalMinggu = mysqli_fetch_assoc($queryMinggu)['total'] ?? 0;
 
-// Total bulan ini
+
 $bulanIni = date('Y-m');
 $queryBulan = mysqli_query($konek, "SELECT SUM(total_pengeluaran) AS total FROM pengeluaran WHERE DATE_FORMAT(tanggal, '%Y-%m') = '$bulanIni'");
 $totalBulan = mysqli_fetch_assoc($queryBulan)['total'] ?? 0;
@@ -40,7 +38,7 @@ $filterStatus = $_POST['status'] ?? '';
 
 $where = [];
 
-// Filter perusahaan (jika dipilih)
+
 if (!empty($filterPerusahaan)) {
     $safePerusahaan = mysqli_real_escape_string($konek, $filterPerusahaan);
     $where[] = "nama_perusahaan = '$safePerusahaan'";
@@ -53,7 +51,7 @@ if (!isset($_POST['filterSubmit'])) {
     $where[] = "status = '$safeStatus'";
 }
 
-// Bangun query
+
 $sql = "SELECT * FROM penawaran";
 if (!empty($where)) {
     $sql .= " WHERE " . implode(" AND ", $where);
@@ -152,7 +150,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
-                    <!-- Bulan Ini -->
+ 
                     <div class="col-md-4 mb-3">
                         <div class="card shadow-sm rounded-3">
                             <div class="card-body">
@@ -165,7 +163,6 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                         </div>
                     </div>
 
-                    <!-- Minggu Ini -->
                     <div class="col-md-4 mb-3">
                         <div class="card shadow-sm rounded-3">
                             <div class="card-body">
@@ -178,7 +175,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                         </div>
                     </div>
 
-                    <!-- Hari Ini -->
+             
                     <div class="col-md-4 mb-3">
                         <div class="card shadow-sm rounded-3">
                             <div class="card-body">
@@ -445,7 +442,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                                 <span class="text-muted">Pada bagian ini untuk melakukan filterisasi terhadap data yang ingin ditampilkan berdasarkan tanggal pengeluaran.</span>
                                 <form method="get" class="mb-3">
                                     <div class="row align-items-end">
-                                        <input type="hidden" name="page" value="pengeluaran"> <!-- untuk routing -->
+                                        <input type="hidden" name="page" value="pengeluaran"> 
 
                                         <div class="col-md-3">
                                             <label>Dari Tanggal:</label>
@@ -537,7 +534,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                                                     $conditions[] = "tanggal BETWEEN '$start' AND '$end'";
                                                 }
                                             } elseif (!isset($_GET['tampilkan_semua'])) {
-                                                // Default ke bulan ini
+                                              
                                                 $month = date('m');
                                                 $year = date('Y');
                                                 $conditions[] = "MONTH(tanggal) = '$month' AND YEAR(tanggal) = '$year'";
@@ -550,8 +547,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                                             $filterQuery .= " ORDER BY tanggal DESC";
                                             $query = mysqli_query($konek, $filterQuery);
 
-                                            while ($pgl = mysqli_fetch_assoc($query)) :
-                                                // Ambil semua jenis pengeluaran
+                                            while ($pgl = mysqli_fetch_assoc($query)) :                                               
                                                 $jenis_list = [];
                                                 $jenis_query = mysqli_query($konek, "SELECT * FROM pengeluaran_jenis WHERE pengeluaran_id = {$pgl['id']}");
                                                 while ($jenis = mysqli_fetch_assoc($jenis_query)) {
@@ -559,7 +555,6 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                                                 }
                                                 $jenis_text = implode("<br>", $jenis_list);
 
-                                                // Ambil invoice terkait
                                                 $items = mysqli_query($konek, "
                                                 SELECT pi.*, inv.no_invoice, inv.perusahaan 
                                                 FROM pengeluaran_items pi 
@@ -568,7 +563,7 @@ $dataPenawaran = mysqli_query($konek, $sql) or die("Query Error: " . mysqli_erro
                                             ");
                                                 $rowspan = mysqli_num_rows($items);
 
-                                                // Jika tidak ada invoice terkait, tetap tampilkan 1 baris
+
                                                 if ($rowspan === 0) {
                                                     echo '<tr>';
                                                     echo '<td>' . $no++ . '</td>';

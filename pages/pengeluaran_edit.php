@@ -15,7 +15,6 @@ if (!$data) {
     exit;
 }
 
-// Ambil invoice terkait
 $invoices = mysqli_query($konek, "SELECT * FROM pengeluaran_items WHERE pengeluaran_id = $id");
 $invoice_ids_terkait = [];
 while ($inv_row = mysqli_fetch_assoc($invoices)) {
@@ -70,12 +69,13 @@ while ($row = mysqli_fetch_assoc($invoice_list)) {
                                         <label>Tanggal:</label>
                                         <input class="form-control mt-2 mb-2" type="date" name="tanggal" value="<?= $data['tanggal'] ?>" required>
                                     </div>
+
                                 </div>
 
 
 
                                 <label>Keterangan:</label>
-                                <textarea class="form-control mt-2 mb-2" name="keterangan" rows="3" cols="50" ><?= htmlspecialchars($data['keterangan']) ?></textarea>
+                                <textarea class="form-control mt-2 mb-2" name="keterangan" rows="3" cols="50"><?= htmlspecialchars($data['keterangan']) ?></textarea>
 
                                 <h4>Invoice Terkait:</h4>
                                 <div id="invoiceContainer">
@@ -83,32 +83,50 @@ while ($row = mysqli_fetch_assoc($invoice_list)) {
                                     <?php
                                     while ($inv = mysqli_fetch_assoc($invoices)):
                                     ?>
-                                        <div class="invoice-row">
-                                            <select class="form-control" name="invoice_id[]">
-                                                <?php foreach ($all_invoices as $opt): ?>
-                                                    <option class="form-control" value="<?= $opt['id'] ?>" <?= $opt['id'] == $inv['invoice_id'] ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($opt['no_invoice']) ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
+                                        <div class="row">
+                                            <div class="invoice-row col-md-10">
+                                                <select class="form-control" name="invoice_id[]">
+                                                    <?php foreach ($all_invoices as $opt): ?>
+                                                        <option class="form-control" value="<?= $opt['id'] ?>" <?= $opt['id'] == $inv['invoice_id'] ? 'selected' : '' ?>>
+                                                            <?= htmlspecialchars($opt['no_invoice']) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a href="pages/pengeluaran_hapus_inv.php?id=<?= $inv['invoice_id'] ?>&inv_id=<?= $id ?>"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Yakin ingin menghapus item ini?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
                                         </div>
+
                                     <?php endwhile; ?>
                                 </div>
                                 <button class="btn btn-primary mt-2 mb-2" type="button" onclick="addInvoice()">+ Tambah Invoice</button>
                                 <h4>Jenis Pengeluaran:</h4>
                                 <p class="card-text"><span>pada bagian ini ubah dapat mengubah atau menambahkan Jenis Pengeluaran</span></p>
-                                <div id="jenisContainer mb-2">
+                                <div id="jenisContainer" class="mb-2">
                                     <?php while ($j = mysqli_fetch_assoc($jenis)): ?>
                                         <div class="row mb-2 jenis-row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-5">
                                                 <input class="form-control" type="text" name="jenis_pengeluaran[]" placeholder="Jenis Pengeluaran" value="<?= htmlspecialchars($j['jenis_pengeluaran']) ?>" required>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-5">
                                                 <input class="form-control" type="number" name="nominal_jenis[]" placeholder="Nominal" value="<?= $j['nominal'] ?>" step="0.01" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a href="pages/pengeluaran_hapus_item.php?id=<?= $j['id'] ?>&plr_id=<?= $id ?>"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Yakin ingin menghapus item ini?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
                                             </div>
                                         </div>
                                     <?php endwhile; ?>
                                 </div>
+
                                 <button class="btn btn-primary mt-2 mb-2" type="button" onclick="addJenis()">+ Tambah Jenis Pengeluaran</button>
 
                                 <br><br>
@@ -138,21 +156,28 @@ while ($row = mysqli_fetch_assoc($invoice_list)) {
         container.appendChild(div);
     }
 
-    function addJenis() {
+     function addJenis() {
         const container = document.getElementById('jenisContainer');
         const div = document.createElement('div');
-        div.classList.add('jenis-row');
+        div.classList.add('row', 'mb-2', 'jenis-row');
         div.innerHTML = `
-    <div class="row mb-2">
-        <div class="col-md-6">
-            <input class="form-control" type="text" name="jenis_pengeluaran[]" placeholder="Jenis Pengeluaran" required>
-        </div>
-        <div class="col-md-6">
-            <input class="form-control" type="number" name="nominal_jenis[]" placeholder="Nominal" step="0.01" required>
-        </div>
-    </div>
-`;
-
+            <div class="col-md-5">
+                <input class="form-control" type="text" name="jenis_pengeluaran[]" placeholder="Jenis Pengeluaran" required>
+            </div>
+            <div class="col-md-5">
+                <input class="form-control" type="number" name="nominal_jenis[]" placeholder="Nominal" step="0.01" required>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-sm btn-danger" onclick="hapusBaris(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
         container.appendChild(div);
+    }
+
+    function hapusBaris(button) {
+        const row = button.closest('.jenis-row');
+        row.remove();
     }
 </script>

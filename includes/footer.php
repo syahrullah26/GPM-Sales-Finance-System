@@ -1,10 +1,10 @@
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
   <div class="copyright">
-    &copy; Copyright <strong><span>PT. GANGSAR PURNAMA MANDIRI</span></strong>. All Rights Reserved
+    &copy; Copyright <strong><span>GPM Sales and Finance System</span></strong>. All Rights Reserved
   </div>
   <div class="copyright">
-    version 2.0
+    <a href="pages/changelog.php" title="Lihat Changelog">version 1.2.0</a>
   </div>
   <div class="credits">
     <!-- All the links in the footer should remain intact. -->

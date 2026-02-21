@@ -4,6 +4,7 @@ include '../includes/koneksi.php';
 if (isset($_POST['submit'])) {
     $perusahaan = $_POST['perusahaan'];
     $no_sp = $_POST['no_sp'];
+    $penerima =$_POST ['penerima'];
     $alamat = $_POST['alamat'];
     $tanggal_penawaran = $_POST['tanggal_penawaran'];
 
@@ -20,9 +21,9 @@ if (isset($_POST['submit'])) {
     $status = 'menunggu';
 
     // Simpan ke tabel penawaran
-    $query_penawaran = "INSERT INTO penawaran (no_sp, nama_perusahaan, alamat, tanggal, total, status) VALUES (?,?, ?, ?, ?, ?)";
+    $query_penawaran = "INSERT INTO penawaran (no_sp, nama_perusahaan,penerima, alamat, tanggal, total, status) VALUES (?,?,?, ?, ?, ?, ?)";
     $stmt = $konek->prepare($query_penawaran);
-    $stmt->bind_param("ssssds", $no_sp, $perusahaan, $alamat, $tanggal_penawaran, $total, $status);
+    $stmt->bind_param("sssssds", $no_sp, $perusahaan,$penerima, $alamat, $tanggal_penawaran, $total, $status);
 
     if ($stmt->execute()) {
         $penawaran_id = $stmt->insert_id;

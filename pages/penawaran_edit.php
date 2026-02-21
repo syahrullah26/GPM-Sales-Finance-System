@@ -19,13 +19,8 @@ $items = mysqli_query($konek, "SELECT * FROM penawaran_items WHERE penawaran_id 
 ?>
 
 <head>
-    <!-- MUAT Bootstrap LEBIH DULU -->
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome (untuk ikon trash, dll) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- CSS Custom kamu -->
     <link rel="stylesheet" href="assets/css/Beranda.css">
 </head>
 
@@ -54,7 +49,16 @@ $items = mysqli_query($konek, "SELECT * FROM penawaran_items WHERE penawaran_id 
                                 <label class="form-label">Nomor Surat Penawaran</label>
                                 <input type="text" name="no_sp" class="form-control" value="<?= htmlspecialchars($data['no_sp']) ?>" required>
                             </div>
-
+                            <div class="row">
+                                <div class="mb-3 form-group col-md-6">
+                                    <label class="form-label">Perusahaan</label>
+                                    <input type="text" name="perusahaan" class="form-control" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>" required>
+                                </div>
+                                <div class="mb-3 form-group col-md-6">
+                                    <label class="form-label">Nama Penerima</label>
+                                    <input type="text" name="penerima" class="form-control" value="<?= htmlspecialchars($data['penerima']) ?>" required>
+                                </div>
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Perusahaan</label>
                                 <input type="text" name="perusahaan" class="form-control" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>" required>
@@ -97,10 +101,13 @@ $items = mysqli_query($konek, "SELECT * FROM penawaran_items WHERE penawaran_id 
                                                 <td><input type="number" name="harga_jual[]" class="form-control" value="<?= $item['harga_jual'] ?>" required></td>
                                                 <td><input type="text" name="keterangan[]" class="form-control" value="<?= htmlspecialchars($item['keterangan']) ?>"></td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-sm btn-danger" onclick="hapusBaris(this)">
+                                                    <a href="#" class="btn btn-sm btn-danger"
+                                                        onclick="hapusItemAjax(<?= $item['id'] ?>, this, event)">
                                                         <i class="fas fa-trash"></i>
-                                                    </button>
+                                                    </a>
                                                 </td>
+
+
                                             </tr>
                                         <?php endwhile; ?>
                                     </tbody>
@@ -124,28 +131,50 @@ $items = mysqli_query($konek, "SELECT * FROM penawaran_items WHERE penawaran_id 
         </div>
     </section>
     <script>
-function tambahBaris() {
-    const tbody = document.querySelector('#produkPenawaran tbody');
-    const tr = document.createElement('tr');
+        function tambahBaris() {
+            const tbody = document.querySelector('#produkPenawaran tbody');
+            const tr = document.createElement('tr');
 
-    tr.innerHTML = `
+            tr.innerHTML = `
         <td><input type="text" name="nama_barang[]" class="form-control" required></td>
         <td><input type="number" name="quantity[]" class="form-control" required></td>
         <td><input type="text" name="satuan[]" class="form-control" required></td>
-        <td><input type="number" name="harga_beli[]" class="form-control" step="0.01" required></td>
-        <td><input type="number" name="harga_jual[]" class="form-control" step="0.01" required></td>
+        <td><input type="number" name="harga_beli[]" class="form-control" step="any" required></td>
+        <td><input type="number" name="harga_jual[]" class="form-control" step="any" required></td>
         <td><input type="text" name="keterangan[]" class="form-control"></td>
         <td class="text-center">
-        <button type="button" class="btn btn-sm btn-danger" onclick="hapusBaris(this)">
-        <i class="fas fa-trash"></i></button>
+        <td class="text-center">
+            <button type="button" class="btn btn-sm btn-danger" onclick="hapusBaris(this)">
+                <i class="fas fa-trash"></i>
+            </button>
         </td>
     `;
 
-    tbody.appendChild(tr);
-}
+            tbody.appendChild(tr);
+        }
+    </script>
 
-function hapusBaris(button) {
-    const row = button.closest('tr');
-    row.remove();
-}
-</script>
+    <script>
+        function hapusItemAjax(itemId, el, event) {
+
+            event.preventDefault();
+
+            if (!confirm('Yakin ingin menghapus item ini?')) return;
+
+            fetch(`pages/penawaran_hapus_item.php?id=${itemId}`, {
+                    method: 'GET'
+                })
+                .then(response => response.text())
+                .then(result => {
+                    if (result.trim() === 'OK') {
+                        el.closest('tr').remove();
+                    } else {
+                        alert('Gagal menghapus item: ' + result);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat menghapus item.');
+                });
+        }
+    </script>

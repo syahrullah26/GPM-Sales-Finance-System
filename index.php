@@ -82,16 +82,16 @@
 
 <body>
   <!-- Loader -->
-  <div id="loader" class="loader">
-    <div class="loader-content">
-      <div class="loader-icon">
-        <img src="assets/images/purnama.png" alt="Bastami Logo">
-      </div>
-      <div class="loader-progress">
-        <div class="progress-bar"></div>
-      </div>
-    </div>
-  </div>
+  <!-- <div id="loader" class="loader">
+        <div class="loader-content">
+          <div class="loader-icon">
+            <img src="assets/images/purnama.png" alt="Bastami Logo">
+          </div>
+          <div class="loader-progress">
+            <div class="progress-bar"></div>
+          </div>
+        </div>
+      </div> -->
 
   <!-- Your existing content here -->
 
@@ -124,6 +124,18 @@
         break;
       case 'pengeluaran_edit':
         include "pages/pengeluaran_edit.php";
+        break;
+      case 'overdue_invoice':
+        include "pages/invoice_jatuh_tempo.php";
+        break;
+      case 'rugiLabaBersih':
+        include "pages/rugi_laba_bersih.php";
+        break;
+      case 'laba_bersih':
+        include "pages/laba_bersih.php";
+        break;
+      case 'laporan_pengeluaran':
+        include "pages/pengeluaran_laporan.php";
         break;
       default:
         include "pages/beranda.php";

@@ -1,8 +1,5 @@
 <?php
-
 include 'includes/koneksi.php';
-
-
 
 if (!isset($_GET['id'])) {
     echo "ID invoice tidak ditemukan!";
@@ -19,19 +16,11 @@ if (!$invoice) {
 $items = mysqli_query($konek, "SELECT * FROM invoice_items WHERE invoice_id = $id");
 ?>
 
-
 <head>
-    <!-- MUAT Bootstrap LEBIH DULU -->
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome (untuk ikon trash, dll) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- CSS Custom kamu -->
     <link rel="stylesheet" href="assets/css/Beranda.css">
 </head>
-
-
 
 <main id="full-width-main" class="full-width-main">
     <div class="pagetitle">
@@ -47,12 +36,13 @@ $items = mysqli_query($konek, "SELECT * FROM invoice_items WHERE invoice_id = $i
     <section class="section dashboard">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body pt-4">
-                        <h4>Edit Invoice No : <b><?= htmlspecialchars($invoice['no_invoice']) ?></b></h4>
-                        <form action="pages/invoice_update.php" method="POST">
-                            <input type="hidden" name="invoice_id" value="<?= $invoice['id'] ?>">
+                <form action="pages/invoice_update.php" method="POST">
+                    <input type="hidden" name="invoice_id" value="<?= $invoice['id'] ?>">
 
+                    <!-- Informasi Utama -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light fw-bold">Informasi Utama Invoice</div>
+                        <div class="card-body">
                             <div class="mb-3">
                                 <label class="form-label">Perusahaan</label>
                                 <input type="text" name="perusahaan" class="form-control" value="<?= htmlspecialchars($invoice['perusahaan']) ?>" required>
@@ -88,8 +78,32 @@ $items = mysqli_query($konek, "SELECT * FROM invoice_items WHERE invoice_id = $i
                                     <input type="date" name="jatuh_tempo" class="form-control" value="<?= $invoice['jatuh_tempo'] ?>" required>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <h5 class="mt-4">Produk</h5>
+                    <!-- Informasi Pajak -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light fw-bold">Informasi Pajak</div>
+                        <div class="card-body">
+                            <label class="form-label fw-semibold">Pajak:</label>
+                            <div class="d-flex gap-3">
+                                <input type="radio" class="btn-check" name="pajak" id="pajakYa" value="ya" autocomplete="off" <?= $invoice['pajak'] === 'ya' ? 'checked' : '' ?>>
+                                <label class="btn btn-outline-primary px-4 py-2 rounded-3 shadow-sm" for="pajakYa">
+                                    <i class="fas fa-receipt me-2"></i> Dengan Pajak
+                                </label>
+
+                                <input type="radio" class="btn-check" name="pajak" id="pajakTidak" value="tidak" autocomplete="off" <?= $invoice['pajak'] === 'tidak' ? 'checked' : '' ?>>
+                                <label class="btn btn-outline-danger px-4 py-2 rounded-3 shadow-sm" for="pajakTidak">
+                                    <i class="fas fa-ban me-2"></i> Tanpa Pajak
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produk -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light fw-bold">Daftar Produk</div>
+                        <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-sm" id="productTable">
                                     <thead class="table-light text-center">
@@ -114,28 +128,28 @@ $items = mysqli_query($konek, "SELECT * FROM invoice_items WHERE invoice_id = $i
                                                 <td><input type="number" name="harga_beli[]" class="form-control" value="<?= $item['harga_beli'] ?>" required></td>
                                                 <td><input type="number" name="harga_jual[]" class="form-control" value="<?= $item['harga_jual'] ?>" required></td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-sm btn-danger" onclick="removeRow(this)">
+                                                    <a href="#" class="btn btn-sm btn-danger"
+                                                        onclick="hapusItemAjax(<?= $item['id'] ?>, this, event)">
                                                         <i class="fas fa-trash"></i>
-                                                    </button>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         <?php endwhile; ?>
                                     </tbody>
                                 </table>
                             </div>
-
-                            <button type="button" class="btn btn-success btn-sm mb-3" onclick="addRow()">
+                            <button type="button" class="btn btn-success btn-sm mt-3" onclick="addRow()">
                                 <i class="fas fa-plus"></i> Tambah Produk
                             </button>
-
-                            <div class="mt-4">
-                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                <a href="index.php?page=rugiLaba" class="btn btn-secondary">Kembali</a>
-                            </div>
-                        </form>
-
+                        </div>
                     </div>
-                </div>
+
+                    <!-- Aksi -->
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <a href="index.php?page=rugiLaba" class="btn btn-secondary">Kembali</a>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -151,18 +165,10 @@ $items = mysqli_query($konek, "SELECT * FROM invoice_items WHERE invoice_id = $i
                 <input type="hidden" name="item_id[]" value="">
                 <input type="text" name="nama_barang[]" class="form-control" required>
             </td>
-            <td>
-                <input type="number" name="quantity[]" class="form-control" required>
-            </td>
-            <td>
-                <input type="text" name="satuan[]" class="form-control" required>
-            </td>
-            <td>
-                <input type="number" name="harga_beli[]" class="form-control" required>
-            </td>
-            <td>
-                <input type="number" name="harga_jual[]" class="form-control" required>
-            </td>
+            <td><input type="number" name="quantity[]" class="form-control" required></td>
+            <td><input type="text" name="satuan[]" class="form-control" required></td>
+            <td><input type="number" name="harga_beli[]" class="form-control" required></td>
+            <td><input type="number" name="harga_jual[]" class="form-control" required></td>
             <td class="text-center">
                 <button type="button" class="btn btn-sm btn-danger" onclick="removeRow(this)">
                     <i class="fas fa-trash"></i>
@@ -174,5 +180,28 @@ $items = mysqli_query($konek, "SELECT * FROM invoice_items WHERE invoice_id = $i
     function removeRow(button) {
         const row = button.closest("tr");
         if (row) row.remove();
+    }
+
+    function hapusItemAjax(itemId, el, event) {
+
+        event.preventDefault();
+
+        if (!confirm('Yakin ingin menghapus item ini?')) return;
+
+        fetch(`pages/invoice_hapus_item.php?id=${itemId}`, {
+                method: 'GET'
+            })
+            .then(response => response.text())
+            .then(result => {
+                if (result.trim() === 'OK') {
+                    el.closest('tr').remove();
+                } else {
+                    alert('Gagal menghapus item: ' + result);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menghapus item.');
+            });
     }
 </script>

@@ -109,9 +109,10 @@ $items = mysqli_query($konek, "SELECT * FROM penawaran_items WHERE penawaran_id 
         </tbody>
     </table>
 
-    <p class="mb-2"><strong>Kepada</strong></p>
-    <p class="mb-2">Yth. <?= htmlspecialchars($data['nama_perusahaan']) ?></p>
-    <p class="mb-2"><?= $data['alamat'] ?></p><br><br>
+    <p class="mb-2"><strong>Quotaiton For:</strong></p>
+    <p class="mb-2">Yth. <?= htmlspecialchars($data['penerima']) ?></p>
+    <p class="mb-2"><?= htmlspecialchars($data['nama_perusahaan']) ?></p>
+    <p class="mb-2"><?= $data['alamat'] ?></p><br><br><br><br>
 
     <p class="mb-2">Dengan Hormat,</p>
     <p class="mb-2">Bersama dengan datangnya surat ini, kami dari PT. Gangsar Purnama Mandiri ingin mengajukan penawaran pengadaan barang kepada <?= htmlspecialchars($data['nama_perusahaan']) ?>. Di bawah ini kami sertakan produk yang siap dipesan beserta hagranya :</p>
@@ -143,7 +144,7 @@ $items = mysqli_query($konek, "SELECT * FROM penawaran_items WHERE penawaran_id 
                     <td class="text-center"><?= number_format($row['harga_jual'], 0, ',', '.') ?></td>
                     <td class="text-center"><?= $row['satuan'] ?></td>
                     <td class="text-center"><?= number_format($jumlah, 0, ',', '.') ?></td>
-                    <td><?= !empty($item['keterangan']) ? htmlspecialchars($item['keterangan']) : ' - ' ?></td>
+                    <td><?= !empty($row['keterangan']) ? htmlspecialchars($row['keterangan']) : ' - ' ?></td>
 
                 </tr>
             <?php endwhile; ?>

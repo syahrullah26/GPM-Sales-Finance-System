@@ -90,12 +90,34 @@ if (!$invoice) die("Data invoice tidak ditemukan.");
 </head>
 
 <body>
-    <a class="btn btn-primary mt-2 " href='surat_jalan_print.php?id=<?= $id ?>'><i class="fas fa-print"></i>
-        print</a>
-    <a class='btn btn-success mt-2 ' href="surat_jalan_export_excel.php?id=<?= $id ?>" class="btn btn-success" target="_blank">
-        <i class="fas fa-file-excel"></i> Export Excel
-    </a>
+    <div class="container mt-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form class="row align-items-end gy-2 gx-3" method="get" action="surat_jalan_print.php" target="_blank">
+                    <input type="hidden" name="id" value="<?= $id ?>">
+                    <div class="col-md-4">
+                        <label for="tanggal_surat" class="form-label fw-bold">
+                            <i class="bi bi-calendar-event-fill me-2"></i>Tanggal Surat Jalan
+                        </label>
+                        <input type="date" id="tanggal_surat" name="tanggal_surat" class="form-control" required>
+                    </div>
+                    <div class="col-md-auto mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-print me-1"></i> Print
+                        </button>
+                    </div>
+                    <div class="col-md-auto mt-4">
+                        <a href="surat_jalan_export_excel.php?id=<?= $id ?>" class="btn btn-success" target="_blank">
+                            <i class="fas fa-file-excel me-1"></i> Export Excel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <hr>
+
     <div class="header" style="text-align: center;">
         <div style="display: inline-flex; align-items: center; gap: 15px;">
             <img src="../assets/images/purnama.png" alt="Logo" style="height: 60px;">

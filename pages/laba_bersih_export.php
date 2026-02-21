@@ -6,24 +6,14 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-function formatDate($date)
-{
-    return strtotime($date) ? date('d F Y', strtotime($date)) : '';
-}
+$tanggalAwal = $_GET['tanggal_awal'] ?? date('Y-m-01');
+$tanggalAkhir = $_GET['tanggal_akhir'] ?? date('Y-m-t');
 
-$filterPerusahaan = $_GET['perusahaan'] ?? '';
-$tanggalAwal = $_GET['tanggal_awal'] ?? '';
-$tanggalAkhir = $_GET['tanggal_akhir'] ?? '';
+$where = ["status = 'sudah bayar'"];
 
-$where = [];
-
-if (!empty($filterPerusahaan)) {
-    $perusahaan = mysqli_real_escape_string($konek, $filterPerusahaan);
-    $where[] = "perusahaan = '$perusahaan'";
-}
 if (!empty($tanggalAwal)) {
     $where[] = "tanggal_invoice >= '$tanggalAwal'";
 }
@@ -36,10 +26,12 @@ if (!empty($where)) {
     $sql .= " WHERE " . implode(" AND ", $where);
 }
 $sql .= " ORDER BY tanggal_invoice DESC";
+
 $invoices = mysqli_query($konek, $sql);
 
-$formattedDateAwal = formatDate($tanggalAwal);
-$formattedDateAkhir = formatDate($tanggalAkhir);
+
+$formattedDateAwal = !empty($tanggalAwal) ? date('d F Y', strtotime($tanggalAwal)) : '';
+$formattedDateAkhir = !empty($tanggalAkhir) ? date('d F Y', strtotime($tanggalAkhir)) : '';
 
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
@@ -56,7 +48,7 @@ $header = [
     'Perusahaan',
     'No Invoice',
     'Tanggal Invoice',
-    'Jatuh Tempo',
+    'Tanggal Bayar',
     'Pajak',
     'Nama Barang',
     'Qty',
@@ -143,7 +135,7 @@ while ($inv = mysqli_fetch_assoc($invoices)) {
     $sheet->setCellValue("B{$rowStart}", $inv['perusahaan']);
     $sheet->setCellValue("C{$rowStart}", $inv['no_invoice']);
     $sheet->setCellValue("D{$rowStart}", $inv['tanggal_invoice']);
-    $sheet->setCellValue("E{$rowStart}", $inv['jatuh_tempo']);
+    $sheet->setCellValue("E{$rowStart}", $inv['tanggal_bayar']);
     $sheet->setCellValue("F{$rowStart}", ucfirst($inv['pajak']));
 
     $sheet->setCellValue("N{$rowStart}", $total_jual);
@@ -168,7 +160,7 @@ while ($inv = mysqli_fetch_assoc($invoices)) {
 
 $summaryRow = $sheet->getHighestRow() + 2;
 
-
+// Tampilkan Grand Total
 $sheet->setCellValue("R{$summaryRow}", 'Grand Total');
 $sheet->setCellValue("S{$summaryRow}", $grandTotalAll);
 $sheet->setCellValue("M{$summaryRow}", 'Grand Total Jual');
