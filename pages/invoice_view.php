@@ -92,7 +92,7 @@ $total = 0;
     <hr>
 
     <!-- Header Perusahaan Sesuai Gambar -->
-<div style="
+    <div style="
     display: grid;
     grid-template-columns: auto 1fr auto; 
     align-items: flex-start; /* Membuat semua kolom rata atas */
@@ -101,12 +101,12 @@ $total = 0;
     width: 100%;
     font-family: Arial, sans-serif;
 ">
-    <div style="padding-right: 15px;">
-        <img src="../assets/images/purnama.png" alt="Logo" style="height: 70px; display: block;">
-    </div>
+        <div style="padding-right: 15px;">
+            <img src="../assets/images/purnama.png" alt="Logo" style="height: 70px; display: block;">
+        </div>
 
-    <div style="padding-right: 50px;"> 
-        <div style="
+        <div style="padding-right: 50px;">
+            <div style="
             font-weight: bold; 
             font-size: 30px; /* Ukuran diperbesar agar lebih tinggi */
             color: #B36E1E; 
@@ -115,29 +115,29 @@ $total = 0;
             white-space: nowrap;
             line-height: 1; /* Mengurangi ruang kosong di atas teks */
         ">
-            PT. GANGSAR PURNAMA MANDIRI
+                PT. GANGSAR PURNAMA MANDIRI
+            </div>
+            <div style="font-size: 13px; line-height: 1.4;">
+                Jl. Jalak Bali II Bekasi Timur Regensi Blok J1/63, Cimuning Kotamadya Bekasi - 17310<br>
+                Telp: 021 82521962 | Contact person: 0852-105-39299
+            </div>
         </div>
-        <div style="font-size: 13px; line-height: 1.4;">
-            Jl. Jalak Bali II Bekasi Timur Regensi Blok J1/63, Cimuning Kotamadya Bekasi - 17310<br>
-            Telp: 021 82521962 | Contact person: 0852-105-39299
-        </div>
-    </div>
 
-    <div style="
+        <div style="
         text-align: right; 
         font-size: 12px; /* Ukuran sedikit diperkecil agar tidak berebut perhatian */
         line-height: 1.4;
         white-space: nowrap;
         padding-top: 8px; /* Memberikan jarak dari atas agar judul PT terlihat jauh lebih tinggi */
     ">
-        <strong>BANK ACC:</strong><br>
-        KCP BEKASI RUKO D GREEN SQUARE<br>
-        PT. GANGSAR PURNAMA MANDIRI<br>
-        <strong>NO REK : 156-00-2000590-8</strong><br>
-        NPWP : 061-953.570-1-407.000<br>
-        e-mail : purnama.mandiri77@gmail.com
+            <strong>BANK ACC:</strong><br>
+            KCP BEKASI RUKO D GREEN SQUARE<br>
+            PT. GANGSAR PURNAMA MANDIRI<br>
+            <strong>NO REK : 156-00-2000590-8</strong><br>
+            NPWP : 061-953.570-1-407.000<br>
+            e-mail : purnama.mandiri77@gmail.com
+        </div>
     </div>
-</div>
 
 
     <!-- Tujuan -->
@@ -168,12 +168,12 @@ $total = 0;
     <!-- Info Kirim -->
     <table class="item-table" style="margin-top: 20px;">
         <tr>
-            <th style ="background-color:#ff8c00; 
+            <th style="background-color:#ff8c00; 
 ">SALES</th>
-            <th style ="background-color:#ff8c00; ">NO PO</th>
-            <th style ="background-color:#ff8c00; ">TGL PENGIRIMAN</th>
-            <th style ="background-color:#ff8c00;  ">NO SURAT JALAN</th>
-            <th style ="background-color:#ff8c00;">JATUH TEMPO</th>
+            <th style="background-color:#ff8c00; ">NO PO</th>
+            <th style="background-color:#ff8c00; ">TGL PENGIRIMAN</th>
+            <th style="background-color:#ff8c00;  ">NO SURAT JALAN</th>
+            <th style="background-color:#ff8c00;">JATUH TEMPO</th>
         </tr>
         <tr>
             <td><?= $data['sales'] ?? 'RENI PURNAMA' ?></td>
@@ -212,6 +212,18 @@ $total = 0;
                 <td colspan="4" class="right">SUB TOTAL</td>
                 <td class="right"><?= number_format($total, 2, ',', '.') ?></td>
             </tr>
+            <?php
+            if (!empty($data['discount']) && $data['discount'] > 0) {
+                $total -= $data['discount'];
+            ?>
+                <tr class="total-row" style="background-color:#E5E5E5;">
+                    <td colspan="4" class="right">DISCOUNT</td>
+                    <td class="right">- <?= number_format($data['discount'], 2, ',', '.') ?></td>
+                </tr>
+            <?php
+            }
+            ?>
+
             <tr class="total-row">
                 <td colspan="4" class="right">PPN</td>
                 <td class="right">
@@ -226,15 +238,15 @@ $total = 0;
             </tr>
         </tbody>
     </table>
-<div style="text-align: left; width: fit-content; margin-top: 20px;">
-    <p style="margin-bottom: 0;">Hormat Kami,</p>
-    
-    <div style="height: 130px;"></div> 
-    
-    <p style="margin-top: 0; font-size: 16px;">
-        <strong style="text-decoration: underline;">Reni Purnama Sari</strong>
-    </p>
-</div>
+    <div style="text-align: left; width: fit-content; margin-top: 20px;">
+        <p style="margin-bottom: 0;">Hormat Kami,</p>
+
+        <div style="height: 130px;"></div>
+
+        <p style="margin-top: 0; font-size: 16px;">
+            <strong style="text-decoration: underline;">Reni Purnama Sari</strong>
+        </p>
+    </div>
 
 </body>
 

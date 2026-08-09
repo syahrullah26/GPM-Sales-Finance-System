@@ -9,7 +9,8 @@ $no_sj = $_POST['no_sj'];
 $tanggal_invoice = $_POST['tanggal_invoice'];
 $jatuh_tempo = $_POST['jatuh_tempo'];
 
-$pajak = $_POST['pajak']; 
+$pajak = $_POST['pajak'];
+$discount_raw = $_POST['discount'] ?? '0';
 
 
 $nama_barang = $_POST['nama_barang'];
@@ -48,34 +49,43 @@ for ($i = 0; $i < count($nama_barang); $i++) {
 
 $total_persen = ($total_beli > 0) ? ($total_laba / $total_beli) * 100 : 0;
 
+
+
+$discount_clean = preg_replace('/[^0-9]/', '', $discount_raw);
+
+$discount = (float) $discount_clean;
+$total_after_discount = $subtotal - $discount;
 $ppn = 0;
 if ($pajak === 'ya') {
-    $ppn = round($total_jual * 0.11); 
+    $ppn = round($total_after_discount * 0.11);
 }
+
+
 
 
 $status = "belum bayar";
 
 $stmt = $konek->prepare("INSERT INTO invoices 
-(perusahaan, alamat, no_invoice, no_po, no_sj, tanggal_invoice, jatuh_tempo, total_beli, total_jual, total_laba, total_persen, pajak, ppn, status) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+(perusahaan, alamat, no_invoice, no_po, no_sj, tanggal_invoice, jatuh_tempo, total_beli, total_jual, total_laba, total_persen, pajak, ppn, discount, status) 
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $stmt->bind_param(
-    "sssssssddddsds",
-    $perusahaan,
-    $alamat,
-    $no_invoice,
-    $no_po,
-    $no_sj,
-    $tanggal_invoice,
-    $jatuh_tempo,
-    $total_beli,
-    $total_jual,
-    $total_laba,
-    $total_persen,
-    $pajak,
-    $ppn,
-    $status
+    "sssssssddddddss",
+    $perusahaan,      // s (string)
+    $alamat,          // s (string)
+    $no_invoice,      // s (string)
+    $no_po,           // s (string)
+    $no_sj,           // s (string)
+    $tanggal_invoice, // s (string)
+    $jatuh_tempo,     // s (string)
+    $total_beli,      // d (double/float)
+    $total_jual,      // d (double/float)
+    $total_laba,      // d (double/float)
+    $total_persen,    // d (double/float)
+    $pajak,           // d (double/float)
+    $ppn,             // d (double/float)
+    $discount,        // d (double/float) 
+    $status           // s (string)
 );
 
 $stmt->execute();

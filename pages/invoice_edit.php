@@ -100,6 +100,14 @@ $items = mysqli_query($konek, "SELECT * FROM invoice_items WHERE invoice_id = $i
                         </div>
                     </div>
 
+                    <div class="col-12">
+                        <div class="border rounded-4 p-4 shadow-sm bg-white">
+                            <h5 class="fw-bold text-primary mb-3"><i class="fas fa-coins me-2"></i>Discount</h5>
+                            <input type="number" name="discount" class="form-control" placeholder="Masukan Discount " Value="<?= $invoice['discount'] ?>">
+                            <small class="form-text text-muted">Contoh Format : 1000000.</small>
+                        </div>
+                    </div>
+
                     <!-- Produk -->
                     <div class="card mb-4">
                         <div class="card-header bg-light fw-bold">Daftar Produk</div>

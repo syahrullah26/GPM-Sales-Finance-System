@@ -392,6 +392,7 @@ $paidinvoices = mysqli_query($konek, $paidsql);
                                                                 <th rowspan="2">Total Beli</th>
                                                                 <th rowspan="2">Total Jual</th>
                                                                 <th rowspan="2">PPN</th>
+                                                                <th rowspan="2">Discount</th>
                                                                 <th rowspan="2">Total Jual Setelah Pajak</th>
                                                                 <th rowspan="2">Total Laba</th>
                                                                 <th rowspan="2">Presentase</th>
@@ -491,6 +492,7 @@ $paidinvoices = mysqli_query($konek, $paidsql);
                                                                             <td rowspan="<?= $rowspan ?>" class="table-success fw-bold text-end">Rp. <?= number_format($total_beli, 0, ',', '.') ?></td>
                                                                             <td rowspan="<?= $rowspan ?>" class="table-success fw-bold text-end">Rp. <?= number_format($total_jual, 0, ',', '.') ?></td>
                                                                             <td rowspan="<?= $rowspan ?>" class="text-end">Rp. <?= number_format($inv['ppn'], 0, ',', '.') ?></td>
+                                                                            <td rowspan="<?= $rowspan ?>" class="text-end">Rp. <?= number_format($inv['discount'], 0, ',', '.') ?></td>
                                                                             <td rowspan="<?= $rowspan ?>" class="fw-bold text-end text-success">Rp. <?= number_format($total_jual + $inv['ppn'], 0, ',', '.') ?></td>
                                                                             <td rowspan="<?= $rowspan ?>" class="table-success fw-bold text-end">Rp. <?= number_format($total_laba, 0, ',', '.') ?></td>
                                                                             <td rowspan="<?= $rowspan ?>" class="table-success fw-bold text-end">

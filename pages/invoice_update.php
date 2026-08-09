@@ -10,7 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $no_sj = mysqli_real_escape_string($konek, $_POST['no_sj']);
     $tanggal_invoice = $_POST['tanggal_invoice'];
     $jatuh_tempo = $_POST['jatuh_tempo'];
-    $pajak = $_POST['pajak'] === 'ya' ? 'ya' : 'tidak'; 
+    $pajak = $_POST['pajak'] === 'ya' ? 'ya' : 'tidak';
+    $discount_raw = $_POST['discount'] ?? 0;
 
     $item_ids     = $_POST['item_id'] ?? [];
     $nama_barangs = $_POST['nama_barang'] ?? [];
@@ -26,8 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subtotal += $qty * $harga_jual;
     }
 
-    $ppn = $pajak === 'ya' ? round($subtotal * 0.11) : 0;
 
+
+    $discount = (float) str_replace(['.', ','], ['', '.'], $discount_raw);
+
+    $subtotal_after_discount = $subtotal - $discount;
+    $ppn = $pajak === 'ya' ? round($subtotal_after_discount * 0.11) : 0;
 
     mysqli_query($konek, "UPDATE invoices SET 
         perusahaan = '$perusahaan',
@@ -38,7 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         tanggal_invoice = '$tanggal_invoice',
         jatuh_tempo = '$jatuh_tempo',
         pajak = '$pajak',
-        ppn = $ppn
+        ppn = $ppn,
+        discount = $discount
         WHERE id = $invoice_id
     ");
 
@@ -88,4 +94,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: ../index.php?page=rugiLaba&updated=$invoice_id");
     exit;
 }
-?>
