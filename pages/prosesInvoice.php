@@ -9,7 +9,7 @@ $no_sj = $_POST['no_sj'];
 $tanggal_invoice = $_POST['tanggal_invoice'];
 $jatuh_tempo = $_POST['jatuh_tempo'];
 
-$pajak = $_POST['pajak'];
+$pajak = $_POST['pajak'] === 'ya' ? 'ya' : 'tidak';
 $discount_raw = $_POST['discount'] ?? '0';
 
 
@@ -54,11 +54,11 @@ $total_persen = ($total_beli > 0) ? ($total_laba / $total_beli) * 100 : 0;
 $discount_clean = preg_replace('/[^0-9]/', '', $discount_raw);
 
 $discount = (float) $discount_clean;
-$total_after_discount = $subtotal - $discount;
-$ppn = 0;
-if ($pajak === 'ya') {
-    $ppn = round($total_after_discount * 0.11);
-}
+$total_after_discount = $total_jual - $discount;
+$ppn = $pajak === 'ya' ? round($total_after_discount * 0.11) : 0;
+// if ($pajak === 'ya') {
+//     $ppn = round($total_after_discount * 0.11);
+// }
 
 
 
@@ -70,7 +70,7 @@ $stmt = $konek->prepare("INSERT INTO invoices
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $stmt->bind_param(
-    "sssssssddddddss",
+    "sssssssddddsdis",
     $perusahaan,      // s (string)
     $alamat,          // s (string)
     $no_invoice,      // s (string)
